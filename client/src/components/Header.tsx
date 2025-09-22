@@ -10,10 +10,13 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Header() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const productCategories = {
     "Screen Printing": [
@@ -52,7 +55,7 @@ export default function Header() {
               <Phone className="h-4 w-4" />
               +62 21 1234 5678
             </span>
-            <span>Email: info@sapuri.co.id</span>
+            <span>{t('contact.email')}: info@sapuri.co.id</span>
           </div>
           <Button
             size="sm"
@@ -61,7 +64,7 @@ export default function Header() {
             data-testid="button-whatsapp"
           >
             <MessageCircle className="h-4 w-4 mr-2" />
-            WhatsApp
+            {t('contact.whatsapp')}
           </Button>
         </div>
       </div>
@@ -84,12 +87,12 @@ export default function Header() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/" className={`px-4 py-2 rounded-md hover-elevate ${location === "/" ? "bg-accent" : ""}`} data-testid="nav-home">
-                Beranda
+                {t('nav.home')}
               </Link>
             </NavigationMenuItem>
             
             <NavigationMenuItem>
-              <NavigationMenuTrigger data-testid="nav-products-trigger">Produk</NavigationMenuTrigger>
+              <NavigationMenuTrigger data-testid="nav-products-trigger">{t('nav.products')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid grid-cols-3 gap-6 p-6 w-[800px]">
                   {Object.entries(productCategories).map(([division, categories]) => (
@@ -116,31 +119,32 @@ export default function Header() {
 
             <NavigationMenuItem>
               <Link href="/about" className={`px-4 py-2 rounded-md hover-elevate ${location === "/about" ? "bg-accent" : ""}`} data-testid="nav-about">
-                Tentang Kami
+                {t('nav.about')}
               </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
               <Link href="/articles" className={`px-4 py-2 rounded-md hover-elevate ${location === "/articles" ? "bg-accent" : ""}`} data-testid="nav-articles">
-                Artikel
+                {t('nav.articles')}
               </Link>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
               <Link href="/contact" className={`px-4 py-2 rounded-md hover-elevate ${location === "/contact" ? "bg-accent" : ""}`} data-testid="nav-contact">
-                Kontak
+                {t('nav.contact')}
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Search and CTA */}
+        {/* Search, Language Switcher and CTA */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" data-testid="button-search">
             <Search className="h-5 w-5" />
           </Button>
+          <LanguageSwitcher />
           <Button className="hidden md:flex" data-testid="button-quote">
-            Minta Penawaran
+            {t('nav.quote')}
           </Button>
           
           {/* Mobile menu trigger */}
@@ -153,11 +157,11 @@ export default function Header() {
             <SheetContent side="right" className="w-[300px]">
               <div className="flex flex-col space-y-4 mt-8">
                 <Link href="/" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-nav-home">
-                  Beranda
+                  {t('nav.home')}
                 </Link>
                 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Produk</h3>
+                  <h3 className="text-lg font-medium">{t('nav.products')}</h3>
                   {Object.entries(productCategories).map(([division, categories]) => (
                     <div key={division} className="ml-4 space-y-2">
                       <h4 className="font-medium text-primary">{division}</h4>
@@ -177,17 +181,17 @@ export default function Header() {
                 </div>
                 
                 <Link href="/about" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-nav-about">
-                  Tentang Kami
+                  {t('nav.about')}
                 </Link>
                 <Link href="/articles" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-nav-articles">
-                  Artikel
+                  {t('nav.articles')}
                 </Link>
                 <Link href="/contact" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-nav-contact">
-                  Kontak
+                  {t('nav.contact')}
                 </Link>
                 
                 <Button className="mt-4" data-testid="mobile-button-quote">
-                  Minta Penawaran
+                  {t('nav.quote')}
                 </Button>
               </div>
             </SheetContent>

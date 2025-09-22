@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Calendar, User, Clock } from "lucide-react";
 import { Link } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ArticlesPreview() {
+  const { t } = useLanguage();
+  
   // todo: remove mock functionality - replace with real data
   const articles = [
     {
@@ -57,16 +60,16 @@ export default function ArticlesPreview() {
         <div className="flex justify-between items-center mb-12">
           <div>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4" data-testid="text-articles-title">
-              Artikel & Tips Terbaru
+              {t('articles.title')}
             </h2>
             <p className="text-lg text-muted-foreground" data-testid="text-articles-description">
-              Insight industri, tips perawatan mesin, dan update teknologi terkini
+              {t('articles.subtitle')}
             </p>
           </div>
           
           <Link href="/articles">
             <Button variant="outline" data-testid="button-articles-all">
-              Lihat Semua
+              {t('articles.viewAll')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -100,7 +103,7 @@ export default function ArticlesPreview() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    {article.readTime}
+                    {article.readTime.replace('menit', t('articles.readTime'))}
                   </div>
                 </div>
                 
@@ -119,7 +122,7 @@ export default function ArticlesPreview() {
                   </div>
                   <Link href={`/articles/${article.id}`}>
                     <Button variant="ghost" size="sm" className="group/btn" data-testid={`button-article-read-${article.id}`}>
-                      Baca
+                      {t('articles.readMore')}
                       <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </Button>
                   </Link>

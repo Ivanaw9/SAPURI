@@ -23,18 +23,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { MessageCircle, Send } from "lucide-react";
-
-const quoteFormSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 karakter"),
-  company: z.string().optional(),
-  email: z.string().email("Email tidak valid"),
-  phone: z.string().min(10, "Nomor telepon minimal 10 digit"),
-  productName: z.string().min(1, "Pilih produk"),
-  quantity: z.string().min(1, "Jumlah harus diisi"),
-  message: z.string().optional(),
-});
-
-type QuoteFormData = z.infer<typeof quoteFormSchema>;
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface QuoteFormProps {
   productName?: string;
@@ -45,6 +34,19 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
+  
+  const quoteFormSchema = z.object({
+    name: z.string().min(2, t('quote.validation.nameMin')),
+    company: z.string().optional(),
+    email: z.string().email(t('quote.validation.emailInvalid')),
+    phone: z.string().min(10, t('quote.validation.phoneMin')),
+    productName: z.string().min(1, t('quote.validation.productRequired')),
+    quantity: z.string().min(1, t('quote.validation.quantityRequired')),
+    message: z.string().optional(),
+  });
+
+  type QuoteFormData = z.infer<typeof quoteFormSchema>;
 
   const form = useForm<QuoteFormData>({
     resolver: zodResolver(quoteFormSchema),
@@ -70,16 +72,16 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
-        title: "Permintaan Penawaran Berhasil!",
-        description: "Tim kami akan menghubungi Anda dalam 1x24 jam. Terima kasih!",
+        title: t('quote.success.title'),
+        description: t('quote.success.message'),
       });
       
       setOpen(false);
       form.reset();
     } catch (error) {
       toast({
-        title: "Gagal Mengirim",
-        description: "Terjadi kesalahan. Silakan coba lagi atau hubungi kami langsung.",
+        title: t('quote.error.title'),
+        description: t('quote.error.message'),
         variant: "destructive",
       });
     } finally {
@@ -100,25 +102,25 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
       <DialogTrigger asChild>
         {trigger || (
           <Button data-testid="button-quote-form-trigger">
-            Minta Penawaran
+            {t('quote.title')}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Permintaan Penawaran</DialogTitle>
+          <DialogTitle>{t('quote.title')}</DialogTitle>
           <DialogDescription>
-            Isi formulir di bawah ini untuk mendapatkan penawaran harga terbaik dari tim kami.
+            {t('quote.subtitle')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nama Lengkap *</Label>
+            <Label htmlFor="name">{t('quote.name')} {t('quote.required')}</Label>
             <Input
               id="name"
               {...form.register("name")}
-              placeholder="Nama lengkap Anda"
+              placeholder={t('quote.name')}
               data-testid="input-quote-name"
             />
             {form.formState.errors.name && (
@@ -127,17 +129,17 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">Nama Perusahaan</Label>
+            <Label htmlFor="company">{t('quote.company')}</Label>
             <Input
               id="company"
               {...form.register("company")}
-              placeholder="Nama perusahaan (opsional)"
+              placeholder={`${t('quote.company')} ${t('quote.optional')}`}
               data-testid="input-quote-company"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{t('quote.email')} {t('quote.required')}</Label>
             <Input
               id="email"
               type="email"
@@ -151,7 +153,7 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Nomor Telepon/WhatsApp *</Label>
+            <Label htmlFor="phone">{t('quote.phone')} {t('quote.required')}</Label>
             <Input
               id="phone"
               {...form.register("phone")}
@@ -164,13 +166,13 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="productName">Produk yang Diminati *</Label>
+            <Label htmlFor="productName">{t('quote.product')} {t('quote.required')}</Label>
             <Select
               value={form.watch("productName")}
               onValueChange={(value) => form.setValue("productName", value)}
             >
               <SelectTrigger data-testid="select-quote-product">
-                <SelectValue placeholder="Pilih produk" />
+                <SelectValue placeholder={t('quote.product')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="STARWIN Large Format Printer">STARWIN Large Format Printer</SelectItem>
@@ -188,7 +190,7 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="quantity">Jumlah yang Dibutuhkan *</Label>
+            <Label htmlFor="quantity">{t('quote.quantity')} {t('quote.required')}</Label>
             <Input
               id="quantity"
               {...form.register("quantity")}
@@ -201,11 +203,11 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message">Pesan Tambahan</Label>
+            <Label htmlFor="message">{t('quote.message')}</Label>
             <Textarea
               id="message"
               {...form.register("message")}
-              placeholder="Jelaskan kebutuhan spesifik Anda (opsional)"
+              placeholder={`${t('quote.message')} ${t('quote.optional')}`}
               className="min-h-[80px]"
               data-testid="textarea-quote-message"
             />
@@ -218,7 +220,7 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
               className="w-full"
               data-testid="button-quote-submit"
             >
-              {isSubmitting ? "Mengirim..." : "Kirim Permintaan"}
+              {isSubmitting ? `${t('quote.submit')}...` : t('quote.submit')}
               <Send className="ml-2 h-4 w-4" />
             </Button>
             
@@ -229,7 +231,7 @@ export default function QuoteForm({ productName, trigger }: QuoteFormProps) {
               className="w-full"
               data-testid="button-quote-whatsapp"
             >
-              Chat via WhatsApp
+              {t('quote.whatsappChat')}
               <MessageCircle className="ml-2 h-4 w-4" />
             </Button>
           </div>

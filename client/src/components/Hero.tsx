@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import heroImage from "@assets/generated_images/Industrial_printing_equipment_hero_66e655aa.png";
 
 export default function Hero() {
+  const { t } = useLanguage();
+  
   return (
     <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center bg-gradient-to-r from-background to-muted overflow-hidden">
       {/* Background Image */}
@@ -18,23 +21,25 @@ export default function Hero() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl">
           <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight" data-testid="text-hero-title">
-            Solusi Lengkap{" "}
-            <span className="text-primary">Mesin Printing</span>{" "}
-            Industri Indonesia
+            {t('hero.title').split(' ').map((word, index) => {
+              if (word.toLowerCase().includes('printing') || word.toLowerCase().includes('mesin')) {
+                return <span key={index} className="text-primary">{word} </span>;
+              }
+              return word + ' ';
+            })}
           </h1>
           
           <p className="text-lg lg:text-xl text-muted-foreground mb-8 leading-relaxed" data-testid="text-hero-description">
-            SAPURI GROUP menyediakan mesin digital printing, screen printing, dan peralatan keramik 
-            berkualitas tinggi dengan teknologi terdepan untuk kebutuhan industri Anda.
+            {t('hero.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Button size="lg" className="text-lg px-8 py-6" data-testid="button-hero-products">
-              Lihat Produk
+              {t('hero.viewProducts')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 py-6" data-testid="button-hero-contact">
-              Hubungi Kami
+              {t('hero.contactUs')}
               <Play className="ml-2 h-5 w-5" />
             </Button>
           </div>
@@ -43,15 +48,15 @@ export default function Hero() {
           <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/30">
             <div className="text-center sm:text-left">
               <div className="text-2xl lg:text-3xl font-bold text-primary" data-testid="text-stat-products">500+</div>
-              <div className="text-sm text-muted-foreground">Produk Berkualitas</div>
+              <div className="text-sm text-muted-foreground">{t('hero.stats.products')}</div>
             </div>
             <div className="text-center sm:text-left">
               <div className="text-2xl lg:text-3xl font-bold text-primary" data-testid="text-stat-clients">1000+</div>
-              <div className="text-sm text-muted-foreground">Klien Puas</div>
+              <div className="text-sm text-muted-foreground">{t('hero.stats.clients')}</div>
             </div>
             <div className="text-center sm:text-left">
               <div className="text-2xl lg:text-3xl font-bold text-primary" data-testid="text-stat-experience">15+</div>
-              <div className="text-sm text-muted-foreground">Tahun Pengalaman</div>
+              <div className="text-sm text-muted-foreground">{t('hero.stats.experience')}</div>
             </div>
           </div>
         </div>

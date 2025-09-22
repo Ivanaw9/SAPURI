@@ -3,9 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, Star, Zap, Clock } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function FeaturedProducts() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLanguage();
 
   // todo: remove mock functionality - replace with real data
   const featuredProducts = [
@@ -74,10 +76,10 @@ export default function FeaturedProducts() {
         <div className="flex justify-between items-center mb-12">
           <div>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4" data-testid="text-featured-title">
-              Produk Unggulan
+              {t('featured.title')}
             </h2>
             <p className="text-lg text-muted-foreground" data-testid="text-featured-description">
-              Mesin dan peralatan terbaik dengan teknologi terdepan untuk industri Anda
+              {t('featured.subtitle')}
             </p>
           </div>
           
@@ -150,7 +152,7 @@ export default function FeaturedProducts() {
                     {product.price}
                   </div>
                   <Button size="sm" data-testid={`button-product-quote-${product.id}`}>
-                    Minta Penawaran
+                    {t('featured.quote')}
                   </Button>
                 </div>
               </CardContent>
