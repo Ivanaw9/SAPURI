@@ -1,0 +1,124 @@
+Awesome — here’s a ready-to-paste prompt for Replit’s “AI Website” builder. It tells the AI exactly what to rebuild from sapuri.co.id, adds a modern, interactive UI, and locks in the brand colors.
+
+> Based on the current site structure (Home, Products with “Screen Printing”, “Digital Printing” \[Mesin, Eco Solvent Printer, Solvent Printer, Sublimasi Printer], “Material”, “Ink & Sparepart”, “Accessories” and “Ceramic Division” \[Glazing Line, Kiln, Silicon Cylinder, Horizontal Dryer], plus About Us, FAQs, Contact Us, and a Products News/Artikel section). ([sapuri.co.id][1])
+
+---
+
+# Prompt for Replit AI Website
+
+Build a modern, professional website for **SAPURI GROUP (PT. Sumber Alam Putera Lestari)** that **rebuilds** and **improves** the structure/content from **[https://sapuri.co.id/](https://sapuri.co.id/)** while using a clean, responsive, interactive UI.
+
+## Tech & Architecture
+
+* Use **React + Vite** with **Tailwind CSS** (or vanilla HTML/CSS/JS if required by the generator).
+* Mobile-first, responsive up to 1440px+, semantic HTML, WCAG AA contrast.
+* Keep content primarily in **Bahasa Indonesia**; prepare for optional **EN** toggle (scaffold, no need to translate all copy).
+* Organize components clearly (components/, pages/, data/).
+
+## Brand & Visual System
+
+* **Extract brand palette from the source site/logo** and use it consistently.
+
+  * If extraction fails, use this fallback palette:
+
+    * `--color-primary: #0C1C8F` (deep royal blue)
+    * `--color-primary-600: #1426B0`
+    * `--color-accent: #FFB000` (warm accent for CTAs/hover states)
+    * `--color-bg: #F6F8FB`
+    * `--color-text: #101828`
+    * `--color-muted: #667085`
+* Rounded corners (xl/2xl), soft shadows, generous whitespace.
+* Use **system fonts** or Inter.
+
+## Pages & IA (keep URLs readable)
+
+1. **Home**
+
+   * Hero with headline, short value prop, CTA buttons (“Lihat Produk”, “Hubungi Kami”).
+   * Product category tiles (Screen Printing, Digital Printing, Ceramic Division).
+   * Featured products carousel.
+   * “Produk News/Artikel Terbaru” preview (cards).
+   * Partner/supporter logo strip.
+2. **Products** (parent page)
+
+   * Mega-menu with three divisions.
+   * Filters (Division, Subcategory, Brand, In-stock), search bar.
+   * Product grid cards: image, name, 1–2 key specs, “Lihat detail”.
+3. **Screen Printing Division** (child)
+
+   * Subcategories: Kain Screen, Obat Afdruk & Penguat, Pencuci Kain Sablon, Lem Tahan Minyak, Karet Rakel, Aksesoris, Mesin Sablon.
+   * Grid + sticky filter sidebar.
+4. **Digital Printing Division** (child)
+
+   * Subcategories: Mesin, Eco Solvent Printer, Solvent Printer, Sublimasi Printer.
+   * Comparison table block.
+5. **Material / Ink & Sparepart / Accessories** (child pages)
+
+   * Same pattern as above; product cards + tech specs accordion.
+6. **Ceramic Division**
+
+   * Subcategories: Glazing Line, Kiln, Silicon Cylinder, Horizontal Dryer.
+   * Process diagram section (simple SVG).
+7. **Product Detail** (template)
+
+   * Gallery (zoom/lightbox), short specs, long description, downloadable brochure placeholder, “Request Quotation” form (name, company, phone/WA, email, product, qty), CTA to **WhatsApp**.
+8. **About Us**
+
+   * Company overview, timeline, value props, contact badges.
+9. **FAQs**
+
+   * Accordion, searchable.
+10. **Contact Us**
+
+* Address, map embed placeholder, contact form (send to email placeholder), WhatsApp CTA, business hours.
+
+11. **Artikel / Product News**
+
+* Blog list with tags, article detail template (author/date).
+
+## Interactions & Components
+
+* **Sticky header**, mega-menu hover/focus, mobile drawer menu.
+* **Hero**: subtle background animation (CSS only).
+* **Product cards**: hover lift, quick-view modal.
+* **Accordions** for specs/FAQs (keyboard accessible).
+* **Carousel** for featured items (no external heavy libs).
+* **Toast** confirmations for form submissions.
+* **Back-to-top** button.
+* **Dark mode** optional (if trivial).
+
+## Content Handling
+
+* Pull structure and category names from the source site, **rewrite copy** to be concise and professional in Bahasa Indonesia (keep technical terms). Where content is missing, add tasteful placeholders.
+* Add 6–10 example products per key subcategory with mock images and 3–5 bullet specs (can be placeholders).
+* Create 3 sample “Artikel” posts (e.g., mesin press kaos overview, perawatan screen printing, memilih printer eco-solvent).
+
+## Forms & CTAs
+
+* Global **“Request Quote”** and **“Hubungi via WhatsApp”** buttons in header and on product pages.
+* Validate inputs; show success/error states; no real backend, but structure the `fetch` calls for easy integration.
+
+## Performance, SEO & A11y
+
+* Lazy-load images, compress assets, use `alt` text everywhere.
+* SEO: title/meta tags per page, OpenGraph/Twitter tags, sitemap.xml & robots.txt.
+* Landmarks, focus states, aria attributes.
+
+## Footer
+
+* Company info, phone/WA, email, address.
+* Quick links: Products (with sub-links), About, FAQs, Contact, Artikel.
+* Copyright line and credit.
+
+## Deliverables
+
+* Complete project with pages/components above.
+* Color tokens in Tailwind config (or CSS variables).
+* Dummy data JSON for products/articles.
+* Clear README with how to run/build and where to plug in real content.
+
+---
+
+If you want, I can also give you a **Tailwind color map** and a **sample product JSON** to drop in.
+
+[1]: https://sapuri.co.id/ "SABLONINDONESIA - PT. Sumber Alam Putera Lestari"
