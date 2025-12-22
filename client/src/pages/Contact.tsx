@@ -2,91 +2,36 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
   MessageCircle,
-  Send,
   Users,
   Headphones,
-  FileText 
+  FileText,
+  ExternalLink,
 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-
-const contactFormSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 karakter"),
-  email: z.string().email("Email tidak valid"),
-  phone: z.string().min(10, "Nomor telepon minimal 10 digit"),
-  subject: z.string().min(5, "Subjek minimal 5 karakter"),
-  message: z.string().min(10, "Pesan minimal 10 karakter"),
-});
-
-type ContactFormData = z.infer<typeof contactFormSchema>;
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    },
-  });
-
-  const onSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    
-    try {
-      // todo: remove mock functionality - integrate with real API
-      console.log("Contact form submitted:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Pesan Berhasil Dikirim!",
-        description: "Terima kasih telah menghubungi kami. Tim kami akan merespons dalam 1x24 jam.",
-      });
-      
-      form.reset();
-    } catch (error) {
-      toast({
-        title: "Gagal Mengirim",
-        description: "Terjadi kesalahan. Silakan coba lagi atau hubungi kami langsung.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { t, language } = useLanguage();
 
   const contactInfo = [
     {
       icon: MapPin,
-      title: "Alamat Kantor",
+      title: language === 'id' ? "Alamat Kantor" : "Office Address",
       details: [
-        "Jl. Industri Raya No. 123",
-        "Kawasan Industri Pulogadung",
-        "Jakarta Timur 13260, Indonesia"
+        "Grand Puri Niaga",
+        "Jalan Puri Kencana Blok K6 no 2R-2T",
+        "Kembangan Selatan, Kembangan",
+        "Jakarta Barat 11610, Indonesia",
       ],
     },
     {
       icon: Phone,
-      title: "Telepon",
+      title: language === 'id' ? "Telepon" : "Phone",
       details: ["+62 21 1234 5678", "+62 21 1234 5679"],
     },
     {
@@ -101,12 +46,10 @@ export default function Contact() {
     },
     {
       icon: Clock,
-      title: "Jam Operasional",
-      details: [
-        "Senin - Jumat: 08:00 - 17:00",
-        "Sabtu: 08:00 - 12:00",
-        "Minggu: Tutup"
-      ],
+      title: language === 'id' ? "Jam Operasional" : "Operating Hours",
+      details: language === 'id' 
+        ? ["Senin - Jumat: 08:00 - 17:00", "Sabtu: 08:00 - 12:00", "Minggu: Tutup"]
+        : ["Monday - Friday: 08:00 - 17:00", "Saturday: 08:00 - 12:00", "Sunday: Closed"],
     },
   ];
 
@@ -114,64 +57,81 @@ export default function Contact() {
     {
       icon: Users,
       title: "Sales & Marketing",
-      description: "Konsultasi produk dan penawaran harga",
+      description: language === 'id' ? "Konsultasi produk dan penawaran harga" : "Product consultation and pricing",
       contact: "sales@sapuri.co.id",
       phone: "+62 812 3456 7890",
     },
     {
       icon: Headphones,
       title: "Technical Support",
-      description: "Bantuan teknis dan perawatan mesin",
-      contact: "support@sapuri.co.id", 
+      description: language === 'id' ? "Bantuan teknis dan perawatan mesin" : "Technical assistance and machine maintenance",
+      contact: "support@sapuri.co.id",
       phone: "+62 812 3456 7891",
     },
     {
       icon: FileText,
       title: "Customer Service",
-      description: "Informasi umum dan layanan pelanggan",
+      description: language === 'id' ? "Informasi umum dan layanan pelanggan" : "General information and customer service",
       contact: "info@sapuri.co.id",
       phone: "+62 21 1234 5678",
     },
   ];
 
+  const handleWhatsAppClick = () => {
+    const phone = "6281234567890";
+    const message = language === 'id' 
+      ? "Halo, saya ingin bertanya tentang produk SAPURI." 
+      : "Hello, I would like to inquire about SAPURI products.";
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleEmailClick = (email: string) => {
+    window.open(`mailto:${email}`, '_blank');
+  };
+
+  const handlePhoneClick = (phone: string) => {
+    window.open(`tel:${phone.replace(/\s/g, '')}`, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main>
         {/* Hero Section */}
-        <section className="py-16 lg:py-24 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+        <section className="py-12 sm:py-16 lg:py-24 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6" data-testid="text-contact-title">
-                Hubungi Kami
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6" data-testid="text-contact-title">
+                {language === 'id' ? 'Hubungi Kami' : 'Contact Us'}
               </h1>
-              <p className="text-xl leading-relaxed" data-testid="text-contact-subtitle">
-                Tim profesional kami siap membantu kebutuhan bisnis Anda. 
-                Hubungi kami untuk konsultasi produk, penawaran harga, atau bantuan teknis.
+              <p className="text-lg sm:text-xl leading-relaxed" data-testid="text-contact-subtitle">
+                {language === 'id' 
+                  ? 'Tim profesional kami siap membantu kebutuhan bisnis Anda. Hubungi kami untuk konsultasi produk, penawaran harga, atau bantuan teknis.'
+                  : 'Our professional team is ready to assist your business needs. Contact us for product consultation, pricing, or technical support.'}
               </p>
             </div>
           </div>
         </section>
 
         {/* Contact Information */}
-        <section className="py-16 bg-background">
+        <section className="py-12 sm:py-16 bg-background">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 return (
                   <Card key={index} className="text-center hover-elevate" data-testid={`contact-info-${index}`}>
-                    <CardContent className="p-6">
-                      <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                        <IconComponent className="h-8 w-8 text-primary" />
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="bg-primary/10 rounded-full w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4">
+                        <IconComponent className="h-7 w-7 sm:h-8 sm:w-8 text-primary" />
                       </div>
-                      <h3 className="text-lg font-bold text-foreground mb-3">
+                      <h3 className="text-base sm:text-lg font-bold text-foreground mb-3">
                         {info.title}
                       </h3>
                       <div className="space-y-1">
                         {info.details.map((detail, detailIndex) => (
-                          <p key={detailIndex} className="text-muted-foreground">
+                          <p key={detailIndex} className="text-sm sm:text-base text-muted-foreground">
                             {detail}
                           </p>
                         ))}
@@ -183,30 +143,42 @@ export default function Contact() {
             </div>
 
             {/* Departments */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {departments.map((dept, index) => {
                 const IconComponent = dept.icon;
                 return (
                   <Card key={index} className="hover-elevate" data-testid={`department-${index}`}>
-                    <CardHeader>
+                    <CardHeader className="pb-2">
                       <div className="flex items-center gap-3">
                         <div className="bg-primary/10 rounded-lg p-2">
-                          <IconComponent className="h-6 w-6 text-primary" />
+                          <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                         </div>
-                        <CardTitle className="text-lg">{dept.title}</CardTitle>
+                        <CardTitle className="text-base sm:text-lg">{dept.title}</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground mb-4">{dept.description}</p>
+                      <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                        {dept.description}
+                      </p>
                       <div className="space-y-2 text-sm">
-                        <p className="flex items-center gap-2">
-                          <Mail className="h-4 w-4" />
-                          {dept.contact}
-                        </p>
-                        <p className="flex items-center gap-2">
-                          <Phone className="h-4 w-4" />
-                          {dept.phone}
-                        </p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start p-0 h-auto hover:bg-transparent"
+                          onClick={() => handleEmailClick(dept.contact)}
+                        >
+                          <Mail className="h-4 w-4 mr-2" />
+                          <span className="text-primary hover:underline">{dept.contact}</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start p-0 h-auto hover:bg-transparent"
+                          onClick={() => handlePhoneClick(dept.phone)}
+                        >
+                          <Phone className="h-4 w-4 mr-2" />
+                          <span className="text-primary hover:underline">{dept.phone}</span>
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -216,157 +188,106 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Contact Form & Map */}
-        <section className="py-16 lg:py-24 bg-muted/30">
+        {/* Map & Quick Contact */}
+        <section className="py-12 sm:py-16 lg:py-24 bg-muted/30">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Contact Form */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl" data-testid="text-form-title">
-                    Kirim Pesan
-                  </CardTitle>
-                  <p className="text-muted-foreground">
-                    Isi formulir di bawah ini dan kami akan merespons segera.
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Nama Lengkap *</Label>
-                        <Input
-                          id="name"
-                          {...form.register("name")}
-                          placeholder="Nama lengkap Anda"
-                          data-testid="input-contact-name"
-                        />
-                        {form.formState.errors.name && (
-                          <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Nomor Telepon *</Label>
-                        <Input
-                          id="phone"
-                          {...form.register("phone")}
-                          placeholder="08xxxxxxxxxx"
-                          data-testid="input-contact-phone"
-                        />
-                        {form.formState.errors.phone && (
-                          <p className="text-sm text-destructive">{form.formState.errors.phone.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        {...form.register("email")}
-                        placeholder="email@example.com"
-                        data-testid="input-contact-email"
-                      />
-                      {form.formState.errors.email && (
-                        <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Subjek *</Label>
-                      <Input
-                        id="subject"
-                        {...form.register("subject")}
-                        placeholder="Subjek pesan Anda"
-                        data-testid="input-contact-subject"
-                      />
-                      {form.formState.errors.subject && (
-                        <p className="text-sm text-destructive">{form.formState.errors.subject.message}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Pesan *</Label>
-                      <Textarea
-                        id="message"
-                        {...form.register("message")}
-                        placeholder="Tulis pesan Anda di sini..."
-                        className="min-h-[120px]"
-                        data-testid="textarea-contact-message"
-                      />
-                      {form.formState.errors.message && (
-                        <p className="text-sm text-destructive">{form.formState.errors.message.message}</p>
-                      )}
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      className="w-full"
-                      data-testid="button-contact-submit"
-                    >
-                      {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
-                      <Send className="ml-2 h-4 w-4" />
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
               {/* Map */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl">Lokasi Kami</CardTitle>
-                  <p className="text-muted-foreground">
-                    Kunjungi showroom kami untuk melihat langsung koleksi mesin printing terbaru.
+                  <CardTitle className="text-xl sm:text-2xl">
+                    {language === 'id' ? 'Lokasi Kami' : 'Our Location'}
+                  </CardTitle>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    {language === 'id' 
+                      ? 'Kunjungi showroom kami untuk melihat langsung koleksi mesin printing terbaru.'
+                      : 'Visit our showroom to see the latest printing machine collection in person.'}
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <div className="aspect-square bg-muted rounded-lg flex items-center justify-center">
-                    {/* todo: remove mock functionality - integrate with real map */}
-                    <div className="text-center text-muted-foreground">
-                      <MapPin className="h-12 w-12 mx-auto mb-4" />
-                      <p>Google Maps akan dimuat di sini</p>
-                      <p className="text-sm mt-2">Jakarta Timur, Indonesia</p>
+                  <div className="aspect-video sm:aspect-square bg-muted rounded-lg flex items-center justify-center">
+                    <div className="text-center text-muted-foreground p-4">
+                      <MapPin className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4" />
+                      <p className="font-medium">Grand Puri Niaga</p>
+                      <p className="text-sm mt-2">Jl. Puri Kencana Blok K6 no 2R-2T</p>
+                      <p className="text-sm">Jakarta Barat, Indonesia</p>
                     </div>
                   </div>
-                  
+
                   <div className="mt-6">
-                    <Button variant="outline" className="w-full" data-testid="button-directions">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => window.open('https://maps.google.com/?q=Grand+Puri+Niaga+Jakarta', '_blank')}
+                      data-testid="button-directions"
+                    >
                       <MapPin className="mr-2 h-4 w-4" />
-                      Dapatkan Petunjuk Arah
+                      {language === 'id' ? 'Buka di Google Maps' : 'Open in Google Maps'}
+                      <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-primary text-primary-foreground">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6" data-testid="text-cta-emergency">
-              Butuh Bantuan Segera?
-            </h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Tim support kami siap membantu 24/7 untuk kebutuhan darurat dan support teknis.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="secondary" size="lg" data-testid="button-emergency-call">
-                <Phone className="mr-2 h-5 w-5" />
-                Telepon Sekarang
-              </Button>
-              <Button variant="outline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary" data-testid="button-emergency-whatsapp">
-                <MessageCircle className="mr-2 h-5 w-5" />
-                Chat WhatsApp
-              </Button>
+              {/* Quick Contact */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-xl sm:text-2xl">
+                    {language === 'id' ? 'Hubungi Langsung' : 'Direct Contact'}
+                  </CardTitle>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    {language === 'id' 
+                      ? 'Cara tercepat untuk menghubungi tim kami.'
+                      : 'The fastest way to reach our team.'}
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button
+                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                    size="lg"
+                    onClick={handleWhatsAppClick}
+                    data-testid="button-whatsapp-contact"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    {language === 'id' ? 'Chat via WhatsApp' : 'Chat via WhatsApp'}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    size="lg"
+                    onClick={() => handleEmailClick('info@sapuri.co.id')}
+                    data-testid="button-email-contact"
+                  >
+                    <Mail className="mr-2 h-5 w-5" />
+                    {language === 'id' ? 'Kirim Email' : 'Send Email'}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    size="lg"
+                    onClick={() => handlePhoneClick('+62 21 1234 5678')}
+                    data-testid="button-phone-contact"
+                  >
+                    <Phone className="mr-2 h-5 w-5" />
+                    {language === 'id' ? 'Telepon Sekarang' : 'Call Now'}
+                  </Button>
+
+                  <div className="pt-4 border-t">
+                    <p className="text-sm text-muted-foreground text-center">
+                      {language === 'id' 
+                        ? 'Kami akan merespons dalam waktu 1x24 jam kerja.'
+                        : 'We will respond within 1x24 business hours.'}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

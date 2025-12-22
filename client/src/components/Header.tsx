@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown, Search, Phone, MessageCircle } from "lucide-react";
+import { Menu, Phone, MessageCircle } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -49,13 +49,13 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-background border-b border-border">
       {/* Top bar */}
       <div className="bg-primary text-primary-foreground py-2">
-        <div className="container mx-auto flex justify-between items-center text-sm">
-          <div className="flex items-center gap-4">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <span className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
               +62 21 1234 5678
             </span>
-            <span>{t('contact.email')}: info@sapuri.co.id</span>
+            <span className="hidden sm:inline">{t('contact.email')}: info@sapuri.co.id</span>
           </div>
           <Button
             size="sm"
@@ -70,10 +70,10 @@ export default function Header() {
       </div>
 
       {/* Main header */}
-      <div className="container mx-auto flex items-center justify-between py-4">
+      <div className="container mx-auto px-4 flex items-center justify-between py-4">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3" data-testid="link-home">
-          <div className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-bold text-xl">
+          <div className="bg-primary text-primary-foreground px-3 py-2 rounded-md font-bold text-lg sm:text-xl">
             SAPURI
           </div>
           <div className="hidden md:block">
@@ -137,15 +137,9 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Search, Language Switcher and CTA */}
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" data-testid="button-search">
-            <Search className="h-5 w-5" />
-          </Button>
+        {/* Language Switcher */}
+        <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Button className="hidden md:flex" data-testid="button-quote">
-            {t('nav.quote')}
-          </Button>
           
           {/* Mobile menu trigger */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -189,10 +183,6 @@ export default function Header() {
                 <Link href="/contact" className="text-lg font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-nav-contact">
                   {t('nav.contact')}
                 </Link>
-                
-                <Button className="mt-4" data-testid="mobile-button-quote">
-                  {t('nav.quote')}
-                </Button>
               </div>
             </SheetContent>
           </Sheet>

@@ -5,15 +5,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Globe } from "lucide-react";
+import { Globe, Check } from "lucide-react";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 
 export default function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
 
   const languages = [
-    { code: 'id' as Language, name: 'Bahasa Indonesia', flag: '🇮🇩' },
-    { code: 'en' as Language, name: 'English', flag: '🇺🇸' }
+    { code: 'id' as Language, name: 'Bahasa Indonesia', shortName: 'ID' },
+    { code: 'en' as Language, name: 'English', shortName: 'EN' }
   ];
 
   const currentLanguage = languages.find(lang => lang.code === language);
@@ -23,8 +23,7 @@ export default function LanguageSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-2" data-testid="button-language-switcher">
           <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">{currentLanguage?.flag}</span>
-          <span className="hidden md:inline">{currentLanguage?.name}</span>
+          <span className="font-medium">{currentLanguage?.shortName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -35,7 +34,8 @@ export default function LanguageSwitcher() {
             className={`gap-2 ${language === lang.code ? 'bg-accent' : ''}`}
             data-testid={`language-option-${lang.code}`}
           >
-            <span>{lang.flag}</span>
+            {language === lang.code && <Check className="h-4 w-4" />}
+            {language !== lang.code && <div className="w-4" />}
             <span>{lang.name}</span>
           </DropdownMenuItem>
         ))}

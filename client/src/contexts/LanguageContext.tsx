@@ -16,18 +16,12 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguage] = useState<Language>(() => {
-    // Check localStorage first, then browser language, default to Indonesian
+    // Check localStorage first, default to Indonesian (Bahasa Indonesia)
     const stored = localStorage.getItem('sapuri-language') as Language;
     if (stored && ['id', 'en'].includes(stored)) {
       return stored;
     }
-    
-    const browserLang = navigator.language.toLowerCase();
-    if (browserLang.startsWith('en')) {
-      return 'en';
-    }
-    
-    return 'id'; // Default to Indonesian
+    return 'id'; // Default to Bahasa Indonesia
   });
 
   useEffect(() => {
