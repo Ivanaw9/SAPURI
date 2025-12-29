@@ -11,13 +11,12 @@ import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/contact" component={Contact} />
-      {/* Fallback to 404 */}
-      <Route component={NotFound} />
-    </Switch>
+   <Switch>
+    <Route path="/" component={Home} />
+    <Route path="/contact" component={Contact} />
+    <Route component={NotFound} />
+  </Switch>
+
   );
 }
 
